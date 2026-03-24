@@ -1,7 +1,3 @@
-![Preview 1](Screenshot%202026-03-24%20020416.png)
-
-![Preview 2](Screenshot%202026-03-24%20020439.png)
-
 
 # 🚀 AI SEO Insight Tool - Premium SaaS Template
 
