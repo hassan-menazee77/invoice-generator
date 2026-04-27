@@ -419,7 +419,7 @@
                         <div class="mt-8 text-center text-gray-600 dark:text-gray-400 text-sm">
                             <p>Thank you for your business!</p>
                             <p class="mt-2">For questions about this invoice, please contact us at
-                                contact@yourcompany.com</p>
+                                <span id="previewFooterEmail">contact@yourcompany.com</span></p>
                         </div>
                     </div>
                 </div>
@@ -469,6 +469,16 @@
             // Input change listeners for real-time calculation
             ['taxRate', 'currency'].forEach(id => {
                 document.getElementById(id).addEventListener('input', calculateTotal);
+            });
+
+            // Input change listeners for real-time preview update
+            [
+                'companyName', 'companyEmail', 'companyPhone', 'companyWebsite',
+                'clientName', 'clientEmail', 'clientAddress',
+                'invoiceNumber', 'issueDate', 'dueDate'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updatePreview);
             });
         }
 
@@ -545,7 +555,8 @@
         // Format Currency
         function formatCurrency(amount) {
             const currency = document.getElementById('currency').value;
-            return currency + amount.toFixed(2);
+            const validAmount = isNaN(amount) ? 0 : amount;
+            return currency + validAmount.toFixed(2);
         }
 
         // Update Preview
@@ -555,6 +566,12 @@
             document.getElementById('previewCompanyEmail').textContent = document.getElementById('companyEmail').value;
             document.getElementById('previewCompanyPhone').textContent = document.getElementById('companyPhone').value;
             document.getElementById('previewCompanyWebsite').textContent = document.getElementById('companyWebsite').value;
+            
+            // Update footer email
+            const footerEmailEl = document.getElementById('previewFooterEmail');
+            if (footerEmailEl) {
+                footerEmailEl.textContent = document.getElementById('companyEmail').value;
+            }
 
             // Update client info
             document.getElementById('previewClientName').textContent = document.getElementById('clientName').value;
@@ -612,6 +629,7 @@
 
         // Export to PDF
         function exportToPDF() {
+            updatePreview(); // Ensure preview is fully up to date
             const element = document.getElementById('invoiceTemplate');
             const opt = {
                 margin: 1,
@@ -626,6 +644,7 @@
 
         // Print Invoice
         function printInvoice() {
+            updatePreview(); // Ensure preview is fully up to date
             window.print();
         }
 
